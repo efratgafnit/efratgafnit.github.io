@@ -37,7 +37,7 @@ main [contenteditable]:focus{outline:2px solid #2a8a8a;background:rgba(217,238,2
 .ed-box{background:#fff;color:#222;border-radius:16px;padding:24px;max-width:460px;width:100%;direction:rtl;font-family:Assistant,sans-serif;line-height:1.6}
 .ed-box input{width:100%;margin:12px 0;padding:10px;border:1px solid #bbb;border-radius:10px;font:inherit;direction:ltr}
 .ed-box .ed-row{display:flex;gap:8px}
-@media(max-width:700px){.ed-bar{gap:5px;padding:0 8px}.ed-bar b{display:none}.ed-bar button,.ed-bar a{padding:7px 10px;font-size:.85rem}}`;
+@media(max-width:700px){.ed-bar{gap:5px;padding:0 8px}.ed-bar b,.ed-long{display:none}.ed-bar button,.ed-bar a{padding:7px 10px;font-size:.85rem}}`;
   document.head.append(style);
 
   const bar = document.createElement('div');
@@ -46,7 +46,7 @@ main [contenteditable]:focus{outline:2px solid #2a8a8a;background:rgba(217,238,2
     <button data-a="publish">פרסום</button>
     <button data-a="reset" class="ed-ghost">ביטול שינויים</button>
     <button data-a="logout" class="ed-ghost" title="מחיקת מפתח הגישה מהדפדפן הזה">ניתוק</button>
-    <a href="${location.pathname}" class="ed-ghost">יציאה</a>`;
+    <a href="${location.pathname}" class="ed-ghost">יציאה<span class="ed-long"> ממצב עריכה</span></a>`;
   const statusEl = bar.querySelector('.ed-status');
   const status = t => { statusEl.textContent = t; statusEl.title = t; };
   const publishBtn = bar.querySelector('[data-a=publish]');
