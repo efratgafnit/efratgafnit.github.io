@@ -90,6 +90,10 @@ header{position:sticky;top:0;z-index:50;background:rgba(248,242,232,.92);backdro
 /* about */
 .about-grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:56px;align-items:center}
 .about .photo-ph{border-radius:var(--radius);aspect-ratio:1}
+.photo-ph.has-img{padding:0;border:0;overflow:hidden;display:block}
+.photo-ph.has-img img{width:100%;height:100%;object-fit:cover}
+.logo-ph.has-img{width:auto;border:0;border-radius:0;background:none}
+.logo-ph.has-img img{height:42px;width:auto}
 .quals-title{margin-top:1.4em}
 .quals{list-style:none;padding:0;margin:0;display:flex;flex-wrap:wrap;gap:8px}
 .quals li{background:var(--teal-soft);color:var(--teal-dark);font-weight:600;padding:6px 14px;border-radius:999px;font-size:.92rem}
@@ -208,7 +212,7 @@ body.a11y-nomotion *{transition:none !important;animation:none !important;scroll
   <nav class="wrap nav" aria-label="ניווט ראשי">
     <a class="brand" href="#top">
       <!-- להחליף ב: <img src="images/logo.png" alt="" width="42" height="42"> -->
-      <span class="logo-ph" aria-hidden="true">לוגו</span>
+      <span class="logo-ph" aria-hidden="true" data-img="logo" data-max="300" data-alt="">לוגו</span>
       אפרת-גפנית יצחקי
     </a>
     <button class="menu-btn" aria-expanded="false" aria-controls="menu" aria-label="פתיחת תפריט">☰</button>
@@ -245,14 +249,14 @@ body.a11y-nomotion *{transition:none !important;animation:none !important;scroll
       <p class="zoom-note">(אפשרות למפגשים ב-Zoom)</p>
     </div>
     <!-- להחליף ב: <img class="photo" src="images/efrat.jpg" alt="אפרת-גפנית יצחקי"> -->
-    <div class="photo-ph" role="img" aria-label="מקום לתמונה של אפרת-גפנית">כאן תופיע<br>התמונה של אפרת-גפנית</div>
+    <div class="photo-ph" role="img" aria-label="מקום לתמונה של אפרת-גפנית" data-img="hero" data-max="1200" data-alt="אפרת-גפנית יצחקי">כאן תופיע<br>התמונה של אפרת-גפנית</div>
   </div>
 </section>
 
 <!-- אודות -->
 <section class="about" id="about">
   <div class="wrap about-grid">
-    <div class="photo-ph" role="img" aria-label="מקום לתמונה נוספת">תמונה נוספת<br>(אופציונלי)</div>
+    <div class="photo-ph" role="img" aria-label="מקום לתמונה נוספת" data-img="about" data-max="1000" data-alt="אפרת-גפנית יצחקי">תמונה נוספת<br>(אופציונלי)</div>
     <div>
       <span class="eyebrow">אודות</span>
       <h2>אפרת-גפנית יצחקי</h2>
@@ -427,6 +431,9 @@ body.a11y-nomotion *{transition:none !important;animation:none !important;scroll
 
 <script>
 document.getElementById('year').textContent = new Date().getFullYear();
+
+// visual editor: open the site with ?edit
+if (/[?&]edit\b/.test(location.search)) { const s = document.createElement('script'); s.src = 'editor.js?v=' + Date.now(); document.body.appendChild(s); }
 
 // mobile menu
 const menuBtn = document.querySelector('.menu-btn'), menu = document.getElementById('menu');
