@@ -468,7 +468,8 @@ form.addEventListener('submit', async e => {
     const data = new FormData(form);
     const toEmail = fetch(form.action, { method:'POST', headers:{'Accept':'application/json'}, body:data })
       .then(res => { if (!res.ok) throw 0; });
-    const toSheet = SHEETS_URL ? fetch(SHEETS_URL, { method:'POST', mode:'no-cors', body:new URLSearchParams(data) }) : Promise.reject();
+    const sheetRow = new URLSearchParams({ name:data.get('שם'), phone:data.get('טלפון'), email:data.get('אימייל'), topic:data.get('נושא'), message:data.get('הודעה') });
+    const toSheet = SHEETS_URL ? fetch(SHEETS_URL, { method:'POST', mode:'no-cors', body:sheetRow }) : Promise.reject();
     await Promise.any([toEmail, toSheet]);
     form.reset(); msg.style.color = 'var(--teal-dark)'; msg.textContent = 'תודה! הפנייה התקבלה, ואחזור אלייך בהקדם.';
   } catch {
