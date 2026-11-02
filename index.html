@@ -454,14 +454,17 @@ aPanel.addEventListener('click', e => {
   apply(); save();
 });
 
-// contact form (FormSubmit)
+// contact form: email via FormSubmit + a row in Google Sheets (Apps Script web app URL)
+const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbyQSVN97XDXSnk3poNc_kglj0a_BrTWHfTzFwqo18J_cJO_F24H8So2k-VLs3iXkLPv/exec';
 const form = document.getElementById('contact-form'), msg = document.getElementById('form-msg');
 form.addEventListener('submit', async e => {
   e.preventDefault();
   if (!form.checkValidity()) { msg.textContent = 'נא למלא שם, טלפון ולאשר את תנאי השימוש בפרטים.'; msg.style.color = '#a33'; form.querySelector(':invalid').focus(); return; }
   msg.style.color = ''; msg.textContent = 'שולח...';
   try {
-    const res = await fetch(form.action, { method:'POST', headers:{'Accept':'application/json'}, body:new FormData(form) });
+    const data = new FormData(form);
+    if (SHEETS_URL) fetch(SHEETS_URL, { method:'POST', mode:'no-cors', body:new URLSearchParams(data) }).catch(() => {});
+    const res = await fetch(form.action, { method:'POST', headers:{'Accept':'application/json'}, body:data });
     if (!res.ok) throw 0;
     form.reset(); msg.style.color = 'var(--teal-dark)'; msg.textContent = 'תודה! הפנייה התקבלה, ואחזור אלייך בהקדם.';
   } catch {
