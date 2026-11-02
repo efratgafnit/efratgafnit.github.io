@@ -46,7 +46,7 @@ main [contenteditable]:focus{outline:2px solid #2a8a8a;background:rgba(217,238,2
     <button data-a="publish">פרסום</button>
     <button data-a="reset" class="ed-ghost">ביטול שינויים</button>
     <button data-a="logout" class="ed-ghost" title="מחיקת מפתח הגישה מהדפדפן הזה">ניתוק</button>
-    <a href="${location.pathname}" class="ed-ghost">יציאה<span class="ed-long"> ממצב עריכה</span></a>`;
+    <a href="${location.pathname}?view" class="ed-ghost">יציאה<span class="ed-long"> ממצב עריכה</span></a>`;
   const statusEl = bar.querySelector('.ed-status');
   const status = t => { statusEl.textContent = t; statusEl.title = t; };
   const publishBtn = bar.querySelector('[data-a=publish]');

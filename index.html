@@ -431,67 +431,19 @@ body.a11y-nomotion *{transition:none !important;animation:none !important;scroll
 <script>
 document.getElementById('year').textContent = new Date().getFullYear();
 
-// visual editor: open the site with ?edit; browsers that already saved an editing key get an "edit" button
-if (/[?&]edit\b/.test(location.search)) { const s = document.createElement('script'); s.src = 'editor.js?v=' + Date.now(); document.body.appendChild(s); }
-else {
+// visual editor: browsers that saved an editing key open straight into edit mode ("?view" shows the plain site with an edit button)
+(() => {
   let canEdit = false; try { canEdit = !!localStorage.getItem('ed-gh-token'); } catch (e) {}
-  if (canEdit) {
+  const q = location.search;
+  if (/[?&]edit\b/.test(q) || (canEdit && !/[?&]view\b/.test(q))) {
+    const s = document.createElement('script'); s.src = 'editor.js?v=' + Date.now(); document.body.appendChild(s);
+  } else if (canEdit) {
     const b = document.createElement('a');
-    b.href = '?edit'; b.textContent = '✏️ מצב עריכה';
+    b.href = location.pathname; b.textContent = '✏️ מצב עריכה';
     b.style.cssText = 'position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:70;background:#1f2a2a;color:#fff;padding:8px 18px;border-radius:999px;font-weight:700;text-decoration:none;box-shadow:0 6px 18px rgba(0,0,0,.25)';
     document.body.appendChild(b);
   }
-}
-
-// mobile menu
-const menuBtn = document.querySelector('.menu-btn'), menu = document.getElementById('menu');
-menuBtn.addEventListener('click', () => {
-  const open = menu.classList.toggle('open');
-  menuBtn.setAttribute('aria-expanded', open);
-});
-menu.addEventListener('click', e => { if (e.target.tagName === 'A') { menu.classList.remove('open'); menuBtn.setAttribute('aria-expanded', false); } });
-
-// accessibility widget
-const aBtn = document.querySelector('.a11y-btn'), aPanel = document.getElementById('a11y-panel');
-let scale = 1;
-const save = () => { try { localStorage.setItem('a11y', JSON.stringify({scale, cls:[...document.body.classList].filter(c=>c.startsWith('a11y-'))})); } catch(e){} };
-const apply = () => { document.documentElement.style.setProperty('--scale', scale);
-  aPanel.querySelectorAll('[data-toggle]').forEach(b => b.setAttribute('aria-pressed', document.body.classList.contains(b.dataset.toggle))); };
-try { const s = JSON.parse(localStorage.getItem('a11y')); if (s) { scale = s.scale || 1; s.cls.forEach(c => document.body.classList.add(c)); } } catch(e){}
-apply();
-aBtn.addEventListener('click', () => { const o = aPanel.classList.toggle('open'); aBtn.setAttribute('aria-expanded', o); });
-document.addEventListener('keydown', e => { if (e.key === 'Escape' && aPanel.classList.contains('open')) { aPanel.classList.remove('open'); aBtn.setAttribute('aria-expanded', false); aBtn.focus(); } });
-aPanel.addEventListener('click', e => {
-  const b = e.target.closest('button'); if (!b) return;
-  if (b.dataset.toggle) document.body.classList.toggle(b.dataset.toggle);
-  if (b.dataset.act === 'bigger') scale = Math.min(1.5, scale + .1);
-  if (b.dataset.act === 'smaller') scale = Math.max(.9, scale - .1);
-  if (b.dataset.act === 'reset') { scale = 1; [...document.body.classList].forEach(c => c.startsWith('a11y-') && document.body.classList.remove(c)); }
-  apply(); save();
-});
-
-// contact form: email via FormSubmit + a row in Google Sheets (Apps Script web app URL)
-const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbyQSVN97XDXSnk3poNc_kglj0a_BrTWHfTzFwqo18J_cJO_F24H8So2k-VLs3iXkLPv/exec';
-const form = document.getElementById('contact-form'), msg = document.getElementById('form-msg');
-form.addEventListener('submit', async e => {
-  e.preventDefault();
-  if (!form.checkValidity()) { msg.textContent = 'נא למלא שם, טלפון ולאשר את תנאי השימוש בפרטים.'; msg.style.color = '#a33'; form.querySelector(':invalid').focus(); return; }
-  msg.style.color = ''; msg.textContent = 'שולח...';
-  const btn = form.querySelector('button[type=submit]'); btn.disabled = true;
-  try {
-    // thank the visitor as soon as either destination accepts; the other keeps going in the background
-    const data = new FormData(form);
-    const toEmail = fetch(form.action, { method:'POST', headers:{'Accept':'application/json'}, body:data })
-      .then(res => { if (!res.ok) throw 0; });
-    const sheetRow = new URLSearchParams({ name:data.get('שם'), phone:data.get('טלפון'), email:data.get('אימייל'), topic:data.get('נושא'), message:data.get('הודעה') });
-    const toSheet = SHEETS_URL ? fetch(SHEETS_URL, { method:'POST', mode:'no-cors', body:sheetRow }) : Promise.reject();
-    await Promise.any([toEmail, toSheet]);
-    form.reset(); msg.style.color = 'var(--teal-dark)'; msg.textContent = 'תודה! הפנייה התקבלה, ואחזור אלייך בהקדם.';
-  } catch {
-    msg.style.color = '#a33'; msg.textContent = 'משהו השתבש בשליחה. אפשר לשלוח הודעה בוואטסאפ: 050-3390076';
-  }
-  btn.disabled = false;
-});
+})();
 </script>
 
 
