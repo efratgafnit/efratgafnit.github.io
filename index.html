@@ -70,6 +70,7 @@ header{position:sticky;top:0;z-index:50;background:rgba(248,242,232,.92);backdro
 
 .btn{display:inline-flex;align-items:center;gap:10px;padding:14px 26px;border-radius:999px;font-weight:700;text-decoration:none;border:0;cursor:pointer;font-family:inherit;font-size:1rem;transition:transform .15s,background .15s}
 .btn:hover{transform:translateY(-2px)}
+.btn:disabled{opacity:.6;cursor:wait;transform:none}
 .btn-wa{background:var(--teal);color:#fff}.btn-wa:hover{background:var(--teal-dark)}
 .btn-ghost{background:transparent;color:var(--brown-dark);border:2px solid var(--brown)}
 .btn svg{width:22px;height:22px;fill:currentColor}
@@ -461,15 +462,19 @@ form.addEventListener('submit', async e => {
   e.preventDefault();
   if (!form.checkValidity()) { msg.textContent = 'נא למלא שם, טלפון ולאשר את תנאי השימוש בפרטים.'; msg.style.color = '#a33'; form.querySelector(':invalid').focus(); return; }
   msg.style.color = ''; msg.textContent = 'שולח...';
+  const btn = form.querySelector('button[type=submit]'); btn.disabled = true;
   try {
+    // thank the visitor as soon as either destination accepts; the other keeps going in the background
     const data = new FormData(form);
-    if (SHEETS_URL) fetch(SHEETS_URL, { method:'POST', mode:'no-cors', body:new URLSearchParams(data) }).catch(() => {});
-    const res = await fetch(form.action, { method:'POST', headers:{'Accept':'application/json'}, body:data });
-    if (!res.ok) throw 0;
+    const toEmail = fetch(form.action, { method:'POST', headers:{'Accept':'application/json'}, body:data })
+      .then(res => { if (!res.ok) throw 0; });
+    const toSheet = SHEETS_URL ? fetch(SHEETS_URL, { method:'POST', mode:'no-cors', body:new URLSearchParams(data) }) : Promise.reject();
+    await Promise.any([toEmail, toSheet]);
     form.reset(); msg.style.color = 'var(--teal-dark)'; msg.textContent = 'תודה! הפנייה התקבלה, ואחזור אלייך בהקדם.';
   } catch {
     msg.style.color = '#a33'; msg.textContent = 'משהו השתבש בשליחה. אפשר לשלוח הודעה בוואטסאפ: 050-3390076';
   }
+  btn.disabled = false;
 });
 </script>
 </body>
