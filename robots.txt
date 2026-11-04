@@ -1,3 +1,2 @@
 User-agent: *
 Allow: /
-Sitemap: https://efratgafnit.github.io/sitemap.xml
