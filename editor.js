@@ -177,13 +177,13 @@ main [contenteditable]:focus{outline:2px solid #2a8a8a;background:rgba(217,238,2
         if (file.type === 'image/png') {
           ctx.drawImage(img, 0, 0, c.width, c.height);
           const png = c.toDataURL('image/png');
-          if (png.length * 0.75 <= MAX_IMG_BYTES) return resolve(png);
+          if (png.length * 0.75 <= MAX_IMG_BYTES) return resolve({ dataUrl: png, w: c.width, h: c.height });
         }
         ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, c.width, c.height);
         ctx.drawImage(img, 0, 0, c.width, c.height);
         let q = 0.85, out;
         do { out = c.toDataURL('image/jpeg', q); q -= 0.1; } while (out.length * 0.75 > MAX_IMG_BYTES && q > 0.35);
-        resolve(out);
+        resolve({ dataUrl: out, w: c.width, h: c.height });
       };
       img.onerror = () => { URL.revokeObjectURL(url); reject(); };
       img.src = url;
@@ -198,7 +198,7 @@ main [contenteditable]:focus{outline:2px solid #2a8a8a;background:rgba(217,238,2
       if (!file) return;
       status('מכין את התמונה...');
       try {
-        const dataUrl = await shrink(file, +slot.dataset.max || 1200);
+        const { dataUrl, w, h } = await shrink(file, +slot.dataset.max || 1200);
         const ext = dataUrl.startsWith('data:image/png') ? 'png' : 'jpg';
         const path = `images/${slot.dataset.img}-${Date.now()}.${ext}`;
         const prev = slot.querySelector('img[data-src]');
@@ -208,6 +208,10 @@ main [contenteditable]:focus{outline:2px solid #2a8a8a;background:rgba(217,238,2
         slot.removeAttribute('role'); slot.removeAttribute('aria-label');
         const img = new Image();
         img.src = dataUrl; img.dataset.src = path; img.alt = slot.dataset.alt || '';
+        // known size avoids layout shift; the hero is the first thing on screen, the rest can wait
+        img.width = w; img.height = h;
+        if (slot.dataset.img === 'hero') img.setAttribute('fetchpriority', 'high');
+        else if (slot.closest('main')) { img.loading = 'lazy'; img.decoding = 'async'; }
         slot.replaceChildren(img);
         markDirty();
         status(`התמונה מוכנה (${Math.round(dataUrl.length * 0.75 / 1024)}KB). לחצו "פרסום" כדי לשמור`);

@@ -17,7 +17,8 @@
 <link rel="icon" href="images/logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
-<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700&amp;family=Frank+Ruhl+Libre:wght@500;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700&amp;family=Frank+Ruhl+Libre:wght@500;700&amp;display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700&amp;family=Frank+Ruhl+Libre:wght@500;700&amp;display=swap" rel="stylesheet"></noscript>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -89,7 +90,7 @@ header{position:sticky;top:0;z-index:50;background:rgba(248,242,232,.92);backdro
 /* about */
 .about-grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:56px;align-items:center}
 .about .photo-ph{border-radius:var(--radius);aspect-ratio:1}
-.photo-ph.has-img{padding:0;border:0;overflow:hidden;display:block}
+.photo-ph.has-img{padding:0;border:0;overflow:hidden;display:block;width:100%}
 .photo-ph.has-img img{width:100%;height:100%;object-fit:cover}
 .logo-ph.has-img{width:auto;border:0;border-radius:0;background:none}
 .logo-ph.has-img img{height:42px;width:auto}
@@ -211,7 +212,7 @@ body.a11y-nomotion *{transition:none !important;animation:none !important;scroll
   <nav class="wrap nav" aria-label="ניווט ראשי">
     <a class="brand" href="#top">
       <!-- להחליף ב: <img src="images/logo.png" alt="" width="42" height="42"> -->
-      <span class="logo-ph has-img" aria-hidden="true" data-img="logo" data-max="300" data-alt=""><img src="images/logo-1793737317898.png" alt=""></span>
+      <span class="logo-ph has-img" aria-hidden="true" data-img="logo" data-max="300" data-alt=""><img src="images/logo-1793737317898.png" alt="" width="300" height="237"></span>
       אפרת-גפנית יצחקי
     </a>
     <button class="menu-btn" aria-expanded="false" aria-controls="menu" aria-label="פתיחת תפריט">☰</button>
@@ -248,14 +249,14 @@ body.a11y-nomotion *{transition:none !important;animation:none !important;scroll
       <p class="zoom-note">(אפשרות למפגשים ב-Zoom)</p>
     </div>
     <!-- להחליף ב: <img class="photo" src="images/efrat.jpg" alt="אפרת-גפנית יצחקי"> -->
-    <div class="photo-ph has-img" data-img="hero" data-max="1200" data-alt="אפרת-גפנית יצחקי"><img src="images/hero-1793737291508.jpg" alt="אפרת-גפנית יצחקי"></div>
+    <div class="photo-ph has-img" data-img="hero" data-max="1200" data-alt="אפרת-גפנית יצחקי"><img src="images/hero-1793737291508.jpg" alt="אפרת-גפנית יצחקי" width="964" height="1200" fetchpriority="high"></div>
   </div>
 </section>
 
 <!-- אודות -->
 <section class="about" id="about">
   <div class="wrap about-grid">
-    <div class="photo-ph has-img" data-img="about" data-max="1000" data-alt="אפרת-גפנית יצחקי"><img src="images/about-1793737282020.jpg" alt="אפרת-גפנית יצחקי"></div>
+    <div class="photo-ph has-img" data-img="about" data-max="1000" data-alt="אפרת-גפנית יצחקי"><img src="images/about-1793737282020.jpg" alt="אפרת-גפנית יצחקי" width="1000" height="667" loading="lazy" decoding="async"></div>
     <div>
       <span class="eyebrow">אודות</span>
       <h2>אפרת-גפנית יצחקי</h2>
