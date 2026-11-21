@@ -363,6 +363,21 @@ h3{font-size:clamp(1.25rem,1.8vw,1.5rem)}
   .card h3{margin-top:28px}
   .contact-info,form{border-radius:var(--r-lg)}
 }
+/* ---------- workshop with flyer ---------- */
+.ws-box:has(.ws-flyer){grid-template-columns:1.1fr .9fr;max-width:1200px;text-align:start;justify-items:stretch;align-items:center;gap:clamp(40px,6vw,96px)}
+.ws-box:has(.ws-flyer) h2{font-size:clamp(2.6rem,6vw,5rem);margin-bottom:.25em}
+.ws-box:has(.ws-flyer) p{margin-inline:0}
+.ws-sub{font-family:"Frank Ruhl Libre",serif;font-size:clamp(1.3rem,2.4vw,1.8rem);line-height:1.35;color:#8fd3cf}
+.ws-box .ws-details{margin:32px 0 8px;padding:28px 32px}
+.ws-details h3{font-size:1.25rem;margin-bottom:16px}
+.ws-details dd{font-weight:600}
+.ws-flyer{border-radius:var(--r-xl);overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,.2)}
+.ws-flyer img{width:100%;height:auto}
+@media (max-width:900px){
+  .ws-box:has(.ws-flyer){grid-template-columns:1fr}
+  .ws-flyer{max-width:460px;width:100%;margin-inline:auto;border-radius:var(--r-lg)}
+}
+@media (max-width:600px){.ws-box .ws-details{padding:22px 20px}.workshop .btn{width:100%}}
 </style>
 </head>
 <body>
@@ -477,20 +492,22 @@ h3{font-size:clamp(1.25rem,1.8vw,1.5rem)}
   <div class="wrap ws-box">
     <div>
       <span class="eyebrow">סדנאות</span>
-      <h2>סדנת TAT</h2>
+      <h2>סדנת TAT בקבוצה</h2>
+      <p class="ws-sub">חוויית TAT עם הכוח של הקבוצה</p>
       <p>סדנה חווייתית ועדינה שבה לומדים את טכניקת ה-TAT: שיטה פשוטה שמסייעת לשחרר מטענים רגשיים, לחצים וחוויות שנתקעו בגוף ובנפש, וזאת בלי צורך לספר או לחוות מחדש את כל הסיפור.</p>
       <p>בסדנה נלמד את השלבים, נתרגל יחד באווירה תומכת, וכל משתתף/ת יצא/תצא עם כלי שאפשר להמשיך להשתמש בו גם בבית.</p>
+      <div class="ws-details">
+        <h3>פרטי הסדנה</h3>
+        <dl>
+          <dt>מתי</dt><dd>ימי שלישי, <span dir="ltr">20:30–21:45</span></dd>
+          <dt>תדירות</dt><dd>מפגשים שבועיים, בהרשמה מראש</dd>
+          <dt>מיקום</dt><dd>בזום</dd>
+          <dt>עלות</dt><dd>89 ₪ למפגש</dd>
+        </dl>
+      </div>
       <a class="btn btn-wa" href="https://wa.me/972503390076?text=%D7%A9%D7%9C%D7%95%D7%9D%20%D7%90%D7%A4%D7%A8%D7%AA%2C%20%D7%90%D7%A9%D7%9E%D7%97%20%D7%9C%D7%A4%D7%A8%D7%98%D7%99%D7%9D%20%D7%A2%D7%9C%20%D7%A1%D7%93%D7%A0%D7%AA%20TAT" target="_blank" rel="noopener"><span class="btn-txt">לפרטים והרשמה</span></a>
     </div>
-    <div class="ws-details" hidden="">
-      <h3>פרטי הסדנה הקרובה</h3>
-      <dl>
-        <dt>תאריכים</dt><dd class="tbd">יפורסמו בקרוב</dd>
-        <dt>מיקום</dt><dd class="tbd">זום / פרונטלי – יעודכן</dd>
-        <dt>משך</dt><dd class="tbd">יעודכן</dd>
-        <dt>מחיר</dt><dd class="tbd">יעודכן</dd>
-      </dl>
-    </div>
+    <div class="ws-flyer has-img" data-img="workshop" data-max="1200" data-alt="פלאייר סדנת TAT בקבוצה: ימי שלישי 20:30–21:45, בזום, 89 ₪ למפגש. להרשמה: 050-3390076"><img src="images/workshop-tat.jpg" alt="פלאייר סדנת TAT בקבוצה: ימי שלישי 20:30–21:45, בזום, 89 ₪ למפגש. להרשמה: 050-3390076" width="1080" height="1455" loading="lazy" decoding="async"></div>
   </div>
 </section>
 
