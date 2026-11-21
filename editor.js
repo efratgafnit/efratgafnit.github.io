@@ -1,14 +1,18 @@
 // עורך ויזואלי לאתר. נפתח כשמוסיפים ?edit לכתובת (efratgafnit.github.io/?edit).
-// לחיצה על טקסט עורכת אותו, לחיצה על תמונה מחליפה אותה (מוקטנת אוטומטית),
+// לחיצה על טקסט (כולל כפתורים, תפריט, כותרת עליונה ותחתונה) עורכת אותו, לחיצה על תמונה מחליפה אותה (מוקטנת אוטומטית),
 // ופריטים ברשימות אפשר לשכפל, למחוק ולהזיז. "פרסום" שומר ישירות למאגר ב-GitHub
 // בעזרת מפתח גישה (Token) שנשמר רק בדפדפן של מי שעורך.
 (() => {
   const API = 'https://api.github.com/repos/efratgafnit/efratgafnit.github.io/contents/';
-  const TEXT_SEL = 'h1,h2,h3,p,li,summary,dt,dd,cite,.eyebrow,.how b';
-  const LIST_SEL = '.cards,.fit,.how,.tests,.faq,.quals,.tags';
+  const TEXT_SEL = 'h1,h2,h3,p,li,summary,dt,dd,cite,.eyebrow,.how b,a,label,small,.bsd,footer span,.btn-txt';
+  const LIST_SEL = '.cards,.fit,.how,.tests,.faq,.quals,.tags,.menu';
+  // single-line texts: Enter finishes the edit instead of adding a line break
+  const INLINE_SEL = 'a,label,span,small,summary,dt,cite,b,h1,h2,h3';
+  const ZONE_SELS = ['header', 'main', 'footer'];
   const MAX_IMG_BYTES = 250 * 1024;
   const TOKEN_KEY = 'ed-gh-token';
   const main = document.querySelector('main');
+  const zones = () => ZONE_SELS.map(s => document.querySelector(s)).filter(Boolean);
   const pending = new Map(); // image path -> base64, uploaded on publish
   let loadedSha = null, dirty = false, busy = false;
 
@@ -24,9 +28,10 @@ body.ed-on .wa-float,body.ed-on .a11y-btn,body.ed-on .a11y-panel{display:none}
 .ed-bar button,.ed-bar a,.ed-box button{background:#2a8a8a;color:#fff;border:0;border-radius:999px;padding:8px 16px;font:inherit;font-weight:700;cursor:pointer;text-decoration:none;white-space:nowrap}
 .ed-bar .ed-ghost,.ed-box .ed-ghost{background:transparent;border:1px solid #7bb;color:inherit}
 .ed-bar button:disabled{opacity:.5;cursor:wait}
-main [contenteditable]{outline:1px dashed rgba(42,138,138,.5);outline-offset:3px;border-radius:4px;cursor:text}
-main [contenteditable]:hover{outline-color:#2a8a8a}
-main [contenteditable]:focus{outline:2px solid #2a8a8a;background:rgba(217,238,236,.4)}
+body.ed-on [contenteditable]{outline:1px dashed rgba(42,138,138,.5);outline-offset:3px;border-radius:4px;cursor:text}
+body.ed-on [contenteditable]:hover{outline-color:#2a8a8a}
+body.ed-on [contenteditable]:focus{outline:2px solid #2a8a8a;background:rgba(217,238,236,.4)}
+body.ed-on .btn [contenteditable]:focus{background:rgba(255,255,255,.25)}
 .ed-img{cursor:pointer;position:relative;outline:2px dashed #2a8a8a;outline-offset:4px}
 .ed-img::after{content:"📷 לחצו להחלפת תמונה";position:absolute;bottom:12px;left:50%;transform:translateX(-50%);background:rgba(31,42,42,.85);color:#fff;padding:4px 12px;border-radius:999px;font-size:.8rem;font-weight:600;white-space:nowrap;pointer-events:none}
 .logo-ph.ed-img::after{content:"📷";padding:1px 3px;bottom:-8px;font-size:.65rem}
@@ -108,11 +113,25 @@ main [contenteditable]:focus{outline:2px solid #2a8a8a;background:rgba(217,238,2
   // ---------- editing ----------
   const markDirty = () => { dirty = true; };
 
+  // a button's text goes in its own span, so the icon stays put and the button never acts as one
+  function wrapButtonText(root) {
+    root.querySelectorAll('.btn,button').forEach(b => {
+      if (b.matches('.menu-btn') || b.querySelector('.btn-txt')) return;
+      const t = [...b.childNodes].find(n => n.nodeType === 3 && n.textContent.trim());
+      if (!t) return;
+      const span = document.createElement('span');
+      span.className = 'btn-txt';
+      span.textContent = t.textContent.trim();
+      t.replaceWith(span);
+    });
+  }
+
   function makeEditable(root) {
+    wrapButtonText(root);
     const els = [...(root.matches?.(TEXT_SEL) ? [root] : []), ...root.querySelectorAll(TEXT_SEL)];
     els.forEach(el => {
-      if (el.closest('form') || el.classList.contains('form-msg')) return;
-      if (el.querySelector('a,svg,input,button,img')) return;
+      if (el.classList.contains('form-msg') || el.closest('[aria-hidden="true"]')) return;
+      if (el.querySelector('a,svg,input,button,img,select,textarea')) return;
       if (el.parentElement.closest('[contenteditable]')) return;
       el.contentEditable = 'true';
       el.spellcheck = true;
@@ -135,8 +154,10 @@ main [contenteditable]:focus{outline:2px solid #2a8a8a;background:rgba(217,238,2
     itemBar.style.top = (r.top + scrollY + 4) + 'px';
     itemBar.style.left = (r.left + scrollX + 4) + 'px';
   }
-  main.addEventListener('mouseover', e => { const it = itemOf(e.target); if (it) showItemBar(it); });
-  main.addEventListener('focusin', e => { const it = itemOf(e.target); if (it) showItemBar(it); });
+  zones().forEach(z => {
+    z.addEventListener('mouseover', e => { const it = itemOf(e.target); if (it) showItemBar(it); });
+    z.addEventListener('focusin', e => { const it = itemOf(e.target); if (it) showItemBar(it); });
+  });
   itemBar.addEventListener('mousedown', e => e.preventDefault());
   itemBar.addEventListener('click', e => {
     const a = e.target.closest('button')?.dataset.a;
@@ -152,17 +173,29 @@ main [contenteditable]:focus{outline:2px solid #2a8a8a;background:rgba(217,238,2
     markDirty();
   });
 
-  main.addEventListener('input', markDirty);
-  main.addEventListener('paste', e => {
-    if (!e.target.closest?.('[contenteditable]')) return;
-    e.preventDefault();
-    document.execCommand('insertText', false, e.clipboardData.getData('text/plain'));
+  zones().forEach(z => {
+    z.addEventListener('input', markDirty);
+    z.addEventListener('paste', e => {
+      if (!e.target.closest?.('[contenteditable]')) return;
+      e.preventDefault();
+      document.execCommand('insertText', false, e.clipboardData.getData('text/plain'));
+    });
+    z.addEventListener('keydown', e => {
+      const ed = e.target.closest?.('[contenteditable]');
+      if (e.key !== 'Enter' || !ed) return;
+      e.preventDefault();
+      if (ed.matches(INLINE_SEL)) ed.blur(); else document.execCommand('insertLineBreak');
+    });
+    // links, buttons, labels and FAQ toggles stay put while editing
+    z.addEventListener('click', e => { if (e.target.closest('a,summary,button,label')) e.preventDefault(); }, true);
   });
-  main.addEventListener('keydown', e => {
-    if (e.key === 'Enter' && e.target.closest?.('[contenteditable]')) { e.preventDefault(); document.execCommand('insertLineBreak'); }
+  // the header is reloaded from the source, so the mobile menu button is wired again here
+  document.addEventListener('click', e => {
+    const btn = e.target.closest('header .menu-btn');
+    if (!btn) return;
+    const open = document.getElementById('menu').classList.toggle('open');
+    btn.setAttribute('aria-expanded', open);
   });
-  // links and FAQ toggles stay put while editing
-  main.addEventListener('click', e => { if (e.target.closest('a,summary')) e.preventDefault(); }, true);
 
   // ---------- images ----------
   function shrink(file, max) {
@@ -239,6 +272,8 @@ main [contenteditable]:focus{outline:2px solid #2a8a8a;background:rgba(217,238,2
     c.querySelectorAll('details').forEach(d => d.removeAttribute('open'));
     c.querySelectorAll('.form-msg').forEach(m => { m.textContent = ''; m.removeAttribute('style'); });
     c.querySelectorAll('button[disabled]').forEach(b => b.removeAttribute('disabled'));
+    c.querySelectorAll('.menu.open').forEach(m => m.classList.remove('open'));
+    c.querySelectorAll('.menu-btn').forEach(b => b.setAttribute('aria-expanded', 'false'));
     c.querySelectorAll('img[data-src]').forEach(i => { i.setAttribute('src', i.dataset.src); i.removeAttribute('data-src'); });
     return c;
   }
@@ -259,10 +294,9 @@ main [contenteditable]:focus{outline:2px solid #2a8a8a;background:rgba(217,238,2
         await gh('PUT', path, { message: 'תמונה חדשה מהעורך', content: b64, branch: 'main' });
         pending.delete(path);
       }
-      doc.querySelector('main').innerHTML = clean(main).innerHTML;
-      document.querySelectorAll('header [data-img]').forEach(el => {
-        const t = doc.querySelector(`header [data-img="${el.dataset.img}"]`);
-        if (t) t.outerHTML = clean(el).outerHTML;
+      ZONE_SELS.forEach(sel => {
+        const live = document.querySelector(sel), src = doc.querySelector(sel);
+        if (live && src) src.innerHTML = clean(live).innerHTML;
       });
       const html = '<!doctype html>\n' + doc.documentElement.outerHTML + '\n';
       const res = await gh('PUT', 'index.html', { message: 'עדכון תוכן מהעורך', content: toB64(html), sha, branch: 'main' });
@@ -293,16 +327,15 @@ main [contenteditable]:focus{outline:2px solid #2a8a8a;background:rgba(217,238,2
     try {
       const { sha, doc } = await getSource();
       loadedSha = sha;
-      main.innerHTML = doc.querySelector('main').innerHTML;
-      document.querySelectorAll('header [data-img]').forEach(el => {
-        const t = doc.querySelector(`header [data-img="${el.dataset.img}"]`);
-        if (t) el.replaceWith(document.importNode(t, true));
+      ZONE_SELS.forEach(sel => {
+        const live = document.querySelector(sel), src = doc.querySelector(sel);
+        if (live && src) live.innerHTML = src.innerHTML;
       });
     } catch {
       status('לא הצלחתי לטעון את הגרסה העדכנית. עורכים את מה שמוצג בעמוד');
     }
     main.querySelectorAll('details').forEach(d => { d.open = true; });
-    makeEditable(main);
+    zones().forEach(makeEditable);
     document.querySelectorAll('[data-img]').forEach(s => s.classList.add('ed-img'));
     if (!statusEl.textContent.startsWith('לא')) status('לחצו על טקסט כדי לערוך, או על תמונה כדי להחליף');
   })();
