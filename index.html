@@ -13,8 +13,11 @@
 <meta property="og:title" content="אפרת-גפנית יצחקי | טיפול ואימון בעין יהודית">
 <meta property="og:description" content="מקום בטוח וחם לצמיחה, החלמה ושינוי. ירושלים וזום.">
 <meta property="og:url" content="https://efratgafnit.github.io/">
+<meta property="og:image" content="https://efratgafnit.github.io/images/logo-1793737317898.png">
+<meta property="og:image:width" content="300">
+<meta property="og:image:height" content="237">
 <meta name="theme-color" content="#f6efe4">
-<link rel="icon" href="images/logo.png">
+<link rel="icon" href="images/logo-1793737317898.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
 <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700&amp;family=Frank+Ruhl+Libre:wght@500;700&amp;display=swap" rel="stylesheet" media="print" onload="this.media='all'">
@@ -65,6 +68,10 @@ header{position:sticky;top:0;z-index:50;background:rgba(248,242,232,.92);backdro
 .menu{display:flex;gap:22px;list-style:none;margin:0;padding:0}
 .menu a{text-decoration:none;color:var(--text);font-weight:600;font-size:.95rem;white-space:nowrap}
 .brand,.nav .btn{white-space:nowrap}
+.brand-text{display:flex;flex-direction:column;line-height:1.25}
+.brand-text a{color:inherit;text-decoration:none}
+.brand-phone{font-family:"Assistant",sans-serif;font-weight:600;font-size:.85rem;color:var(--teal-dark) !important;direction:ltr;text-align:right}
+.bsd{position:absolute;top:3px;right:8px;font-size:.7rem;color:var(--muted);line-height:1}
 .menu a:hover{color:var(--teal-dark)}
 .menu-btn{display:none;background:none;border:0;font-size:1.6rem;color:var(--brown-dark);cursor:pointer;padding:6px}
 
@@ -119,6 +126,7 @@ header{position:sticky;top:0;z-index:50;background:rgba(248,242,232,.92);backdro
 .workshop h2,.workshop h3{color:#fff}
 .workshop .eyebrow{color:#8fd3cf}
 .ws-box{display:grid;grid-template-columns:1.2fr .8fr;gap:40px;align-items:center}
+.ws-box:not(:has(.ws-details:not([hidden]))){grid-template-columns:1fr;max-width:760px}
 .ws-details{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15);border-radius:var(--radius);padding:28px}
 .ws-details dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:10px 16px}
 .ws-details dt{color:#8fd3cf;font-weight:700}
@@ -182,8 +190,9 @@ body.a11y-nomotion *{transition:none !important;animation:none !important;scroll
 
 @media (max-width:900px){
   .hero-grid,.about-grid,.ws-box,.contact-grid{grid-template-columns:1fr}
-  .hero .photo-ph{max-width:340px;margin:0 auto;order:-1}
-  .about .photo-ph{max-width:320px}
+  .hero{padding-top:44px}
+  .hero .photo-ph{max-width:240px;margin:0 auto}
+  .about .photo-ph{max-width:320px;margin-inline:auto}
   section{padding:64px 0}
 }
 @media (max-width:1080px){
@@ -210,11 +219,14 @@ body.a11y-nomotion *{transition:none !important;animation:none !important;scroll
 
 <header>
   <nav class="wrap nav" aria-label="ניווט ראשי">
-    <a class="brand" href="#top">
-      <!-- להחליף ב: <img src="images/logo.png" alt="" width="42" height="42"> -->
-      <span class="logo-ph has-img" aria-hidden="true" data-img="logo" data-max="300" data-alt=""><img src="images/logo-1793737317898.png" alt="" width="300" height="237"></span>
-      אפרת-גפנית יצחקי
-    </a>
+    <span class="bsd">בס"ד</span>
+    <div class="brand">
+      <a href="#top" aria-hidden="true" tabindex="-1"><span class="logo-ph has-img" data-img="logo" data-max="300" data-alt=""><img src="images/logo-1793737317898.png" alt="" width="300" height="237"></span></a>
+      <span class="brand-text">
+        <a href="#top">אפרת-גפנית יצחקי</a>
+        <a class="brand-phone" href="tel:+972503390076">050-3390076</a>
+      </span>
+    </div>
     <button class="menu-btn" aria-expanded="false" aria-controls="menu" aria-label="פתיחת תפריט">☰</button>
     <ul class="menu" id="menu">
       <li><a href="#about">אודות</a></li>
@@ -234,18 +246,14 @@ body.a11y-nomotion *{transition:none !important;animation:none !important;scroll
   <div class="wrap hero-grid">
     <div>
       <span class="eyebrow">טיפול ואימון בעין יהודית</span>
-      <h1><span>צמיחה. ריפוי. שינוי</span></h1>
+      <h1><span>ריפוי. צמיחה. תודעה. גילוי</span></h1>
       <p class="sub">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;מקום בטוח.<br>&nbsp;להביא את עצמך לגדול מתוך המרחב הזה.&nbsp;</p>
       <div class="hero-actions">
         <a class="btn btn-wa" href="https://wa.me/972503390076?text=%D7%A9%D7%9C%D7%95%D7%9D%20%D7%90%D7%A4%D7%A8%D7%AA%2C%20%D7%90%D7%A9%D7%9E%D7%97%20%D7%9C%D7%A9%D7%99%D7%97%D7%AA%20%D7%94%D7%99%D7%9B%D7%A8%D7%95%D7%AA" target="_blank" rel="noopener">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.1l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.3-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6a2.7 2.7 0 0 0 1.8-1.2 2.2 2.2 0 0 0 .1-1.3c0-.1-.2-.2-.4-.3z"></path></svg>
           לשיחת היכרות בוואטסאפ
         </a>
-        <a class="btn btn-ghost" href="#about">להכיר אותי</a>
       </div>
-      <ul class="tags" aria-label="פרטים">
-        <li>📍 ירושלים</li><li>🌿 טיפול ואימון</li>
-      </ul>
       <p class="zoom-note">(אפשרות למפגשים ב-Zoom)</p>
     </div>
     <!-- להחליף ב: <img class="photo" src="images/efrat.jpg" alt="אפרת-גפנית יצחקי"> -->
@@ -258,8 +266,7 @@ body.a11y-nomotion *{transition:none !important;animation:none !important;scroll
   <div class="wrap about-grid">
     <div class="photo-ph has-img" data-img="about" data-max="1000" data-alt="אפרת-גפנית יצחקי"><img src="images/about-1793917016754.jpg" alt="אפרת-גפנית יצחקי" width="849" height="1000" loading="lazy" decoding="async"></div>
     <div>
-      <span class="eyebrow">אודות</span>
-      <h2>אפרת-גפנית יצחקי&nbsp;</h2>
+      <h2>אפרת-גפנית יצחקי</h2>
       <p>אפרת-גפנית יצחקי, יועצת חינוכית, מטפלת בפסיכותרפיה התנהגותית-קוגניטיבית, התמחות בטראומה, מאמנת אישית לצמיחה וריפוי.</p>
       <p>במהלך השנים התמקצעתי בתחום הנפש במטרה לעזור לאנשים להגיע לבריאות ורווחה נפשית, מתוך מרחב בטוח.</p>
       <p>מתוך ניסיון רב בקליניקה נוכחתי להבין שהנפש זקוקה למפגש שיש בו התייחסות לכל רמות התודעה: גוף, נפש, אנרגיה, רגש ותודעה, בהתייחסות לאדם השלם.&nbsp;</p>
@@ -273,6 +280,7 @@ body.a11y-nomotion *{transition:none !important;animation:none !important;scroll
         <li>אימון אישי</li>
         <li>הנחיית קבוצות</li>
         <li>תטא הילינג</li>
+        <li>נקודת אמת</li>
       </ul>
     </div>
   </div>
@@ -305,7 +313,7 @@ body.a11y-nomotion *{transition:none !important;animation:none !important;scroll
       <li>עוברים תקופה עמוסה, משבר או שינוי משמעותי</li>
       <li>מתמודדים עם חרדה, דאגה או קושי לישון בשקט</li>
       <li>מחפשת התפתחות וצמיחה אישית</li>
-      <li>מחפשת מרחב בטוח לברר את עצמך ולהקשיב למה שעולה</li><li>מחפשת מרחב לדבר על החיים ומה שעולה מהם.</li>
+      <li>מחפשת מרחב בטוח לדבר על החיים, לברר את עצמך ולהקשיב למה שעולה</li>
     </ul>
     <div class="how">
       <div><b>1</b><h3>שיחת היכרות</h3><p>שיחה קצרה בוואטסאפ או בטלפון, להבין מה מביא אותך ואם זה מתאים.</p></div>
@@ -322,10 +330,10 @@ body.a11y-nomotion *{transition:none !important;animation:none !important;scroll
       <span class="eyebrow">סדנאות</span>
       <h2>סדנת TAT</h2>
       <p>סדנה חווייתית ועדינה שבה לומדים את טכניקת ה-TAT: שיטה פשוטה שמסייעת לשחרר מטענים רגשיים, לחצים וחוויות שנתקעו בגוף ובנפש, וזאת בלי צורך לספר או לחוות מחדש את כל הסיפור.</p>
-      <p>בסדנה נלמד את השלבים, נתרגל יחד באווירה תומכת, וכל משתתף/ת יצאו עם כלי שאפשר להמשיך להשתמש בו גם בבית.</p>
+      <p>בסדנה נלמד את השלבים, נתרגל יחד באווירה תומכת, וכל משתתף/ת יצא/תצא עם כלי שאפשר להמשיך להשתמש בו גם בבית.</p>
       <a class="btn btn-wa" href="https://wa.me/972503390076?text=%D7%A9%D7%9C%D7%95%D7%9D%20%D7%90%D7%A4%D7%A8%D7%AA%2C%20%D7%90%D7%A9%D7%9E%D7%97%20%D7%9C%D7%A4%D7%A8%D7%98%D7%99%D7%9D%20%D7%A2%D7%9C%20%D7%A1%D7%93%D7%A0%D7%AA%20TAT" target="_blank" rel="noopener">לפרטים והרשמה</a>
     </div>
-    <div class="ws-details">
+    <div class="ws-details" hidden>
       <h3>פרטי הסדנה הקרובה</h3>
       <dl>
         <dt>תאריכים</dt><dd class="tbd">יפורסמו בקרוב</dd>
@@ -338,7 +346,7 @@ body.a11y-nomotion *{transition:none !important;animation:none !important;scroll
 </section>
 
 <!-- המלצות -->
-<section class="alt" id="testimonials">
+<section class="alt" id="testimonials" hidden>
   <div class="wrap center">
     <span class="eyebrow">המלצות</span>
     <h2>מה אומרות המטופלות</h2>
@@ -377,7 +385,7 @@ body.a11y-nomotion *{transition:none !important;animation:none !important;scroll
   <div class="wrap contact-grid">
     <div class="contact-info">
       <h3>הדרך המהירה ביותר</h3>
-      <p>שלחו לי הודעה בוואטסאפ, ונתאם שיחת היכרות קצרה.</p>
+      <p>שלחי לי הודעה בוואטסאפ, ונתאם שיחת היכרות קצרה.</p>
       <a class="btn btn-wa" href="https://wa.me/972503390076?text=%D7%A9%D7%9C%D7%95%D7%9D%20%D7%90%D7%A4%D7%A8%D7%AA%2C%20%D7%90%D7%A9%D7%9E%D7%97%20%D7%9C%D7%A9%D7%99%D7%97%D7%AA%20%D7%94%D7%99%D7%9B%D7%A8%D7%95%D7%AA" target="_blank" rel="noopener">שליחת הודעה בוואטסאפ</a>
       <ul>
         <li>📞 <a href="tel:+972503390076">050-3390076</a></li>
