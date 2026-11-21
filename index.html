@@ -246,6 +246,123 @@ body.a11y-nomotion *{transition:none !important;animation:none !important;scroll
 }
 @media (max-width:420px){.wrap{padding:0 16px}.btn{padding:12px 20px}.fit{grid-template-columns:1fr}}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.btn,.card,details,summary::after{transition:none}}
+
+/* ================= Apple-style bold layout (same palette tokens) ================= */
+:root{--header-h:56px;--r-xl:36px}
+section{padding:clamp(96px,13vw,176px) 0}
+.wrap{max-width:1200px}
+
+/* big, tight section headlines */
+h2{font-size:clamp(2.5rem,6.4vw,5rem);line-height:1.04;letter-spacing:-.03em;margin-bottom:.4em}
+h3{font-size:clamp(1.25rem,1.8vw,1.5rem)}
+.eyebrow{font-size:clamp(1rem,1.4vw,1.2rem);letter-spacing:0;margin-bottom:.6em}
+.lead{font-size:clamp(1.2rem,2vw,1.5rem);line-height:1.5;max-width:46ch}
+.center h2{max-width:16ch;margin-inline:auto}
+
+/* slim navigation bar */
+.nav{height:var(--header-h)}
+.menu a{font-size:.9rem;font-weight:600;min-height:40px}
+.nav .btn{min-height:36px;padding:6px 16px;font-size:.88rem}
+.logo-ph.has-img img{height:38px}
+
+/* ---------- hero: full screen, centered, huge type, wide image ---------- */
+.hero{min-height:calc(100svh - var(--header-h));display:flex;align-items:center;padding:clamp(56px,9vw,120px) 0 clamp(48px,7vw,96px)}
+.hero-grid{grid-template-columns:1fr;gap:clamp(48px,7vw,96px);text-align:center;justify-items:center}
+.hero-grid>div:first-child{max-width:1000px}
+.hero h1{font-size:clamp(3.1rem,10vw,8.25rem);line-height:.98;letter-spacing:-.045em;margin-bottom:.32em}
+.hero .eyebrow{font-size:clamp(1.05rem,1.8vw,1.4rem);margin-bottom:1em}
+.hero .sub{font-size:clamp(1.25rem,2.4vw,1.75rem);line-height:1.45;max-width:34ch;margin-inline:auto;margin-bottom:1.4em}
+.hero-actions{justify-content:center}
+.hero-actions .btn{min-height:56px;padding:14px 34px;font-size:1.1rem}
+.hero .photo-ph{width:100%;max-width:none;aspect-ratio:21/9;border-radius:var(--r-xl);box-shadow:var(--shadow-lg)}
+.hero .photo-ph img{object-position:center 40%}
+
+/* ---------- about: large image that stays in view while text scrolls ---------- */
+.about-grid{grid-template-columns:1fr 1fr;gap:clamp(48px,7vw,112px);align-items:start}
+.about-grid>div:last-child{max-width:none;font-size:1.12rem}
+.about .photo-ph{aspect-ratio:4/5;border-radius:var(--r-xl);position:sticky;top:calc(var(--header-h) + 32px);box-shadow:var(--shadow-lg)}
+.about h2{font-size:clamp(2.4rem,5.4vw,4.25rem)}
+.about-grid>div:last-child>p:first-of-type{font-family:"Frank Ruhl Libre",serif;font-size:clamp(1.35rem,2.2vw,1.75rem);line-height:1.4;color:var(--brown-dark)}
+.quals li{padding:8px 16px;font-size:.98rem}
+
+/* ---------- services: bento grid ---------- */
+.cards{grid-template-columns:repeat(3,1fr);gap:20px;margin-top:clamp(48px,7vw,88px)}
+.card{padding:40px 36px;border-radius:var(--r-xl);display:flex;flex-direction:column;min-height:280px}
+.card .ic{width:64px;height:64px;border-radius:20px;margin-bottom:auto}
+.card .ic svg{width:34px;height:34px}
+.card h3{margin-top:40px;font-size:clamp(1.4rem,2vw,1.75rem)}
+.card p{font-size:1.05rem}
+.card:first-child{grid-column:span 2;grid-row:span 2;background:var(--teal-soft);border-color:transparent;padding:clamp(40px,5vw,64px)}
+.card:first-child .ic{width:96px;height:96px;border-radius:28px;background:var(--white)}
+.card:first-child .ic svg{width:52px;height:52px}
+.card:first-child h3{font-size:clamp(2.2rem,4.4vw,3.5rem);letter-spacing:-.03em;line-height:1.05;color:var(--teal-dark)}
+.card:first-child p{font-size:clamp(1.15rem,1.8vw,1.4rem);color:var(--text);max-width:30ch}
+
+/* ---------- who it fits + process ---------- */
+.fit{grid-template-columns:repeat(2,1fr);gap:16px;margin-top:clamp(48px,7vw,80px)}
+.fit li{padding:24px 28px;border-radius:var(--r-lg);font-size:1.15rem;line-height:1.5;align-items:center;border:0;box-shadow:var(--shadow)}
+.fit li::before{width:30px;height:30px;margin-top:0;background-size:18px}
+.how{grid-template-columns:repeat(3,1fr);gap:clamp(24px,4vw,56px);margin-top:clamp(80px,10vw,136px)}
+.how div{text-align:start;padding:32px 0 0;border-top:2px solid var(--beige)}
+.how b{font-size:clamp(4rem,8vw,6.5rem);line-height:.9;letter-spacing:-.04em;margin-bottom:.2em}
+.how h3{font-size:clamp(1.4rem,2vw,1.75rem)}
+.how p{font-size:1.05rem}
+
+/* ---------- workshop: dark, centered statement ---------- */
+.ws-box{text-align:center;justify-items:center}
+.ws-box:not(:has(.ws-details:not([hidden]))){max-width:900px}
+.workshop h2{font-size:clamp(3rem,9vw,7rem);letter-spacing:-.045em}
+.workshop p{font-size:clamp(1.1rem,1.8vw,1.35rem);line-height:1.6;margin-inline:auto}
+.workshop .btn{margin-top:24px;min-height:56px;padding:14px 34px;font-size:1.1rem}
+
+/* ---------- FAQ: clean list with dividers ---------- */
+.faq{max-width:880px;margin-top:clamp(48px,7vw,80px);gap:0;border-top:1px solid var(--beige)}
+.faq details{background:transparent;border:0;border-bottom:1px solid var(--beige);border-radius:0}
+.faq details[open]{box-shadow:none}
+.faq summary{min-height:80px;padding:20px 4px;font-size:clamp(1.1rem,1.8vw,1.4rem)}
+.faq summary::after{width:36px;height:36px;font-size:1.5rem}
+.faq details p{padding:0 4px 28px;font-size:1.1rem;max-width:62ch}
+
+/* ---------- contact ---------- */
+.contact-grid{margin-top:clamp(48px,7vw,80px);gap:24px}
+.contact-info,form{border-radius:var(--r-xl);padding:clamp(32px,4vw,48px)}
+.contact-info h3{font-size:clamp(1.6rem,2.6vw,2.2rem);letter-spacing:-.02em}
+.contact-info li{font-size:1.1rem}
+
+/* ---------- motion: images settle in, content rises (off with reduced motion) ---------- */
+@keyframes settle{from{transform:scale(1.08)}to{transform:none}}
+@keyframes grow{from{opacity:.4;transform:scale(.92)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:no-preference){
+  .hero .photo-ph img{animation:settle 1.6s var(--ease-out) both}
+  @supports (animation-timeline:view()){
+    .hero .photo-ph{animation:grow linear both;animation-timeline:view();animation-range:entry 0% cover 40%}
+    .workshop h2,.how>div,.about h2{animation:rise linear both;animation-timeline:view();animation-range:entry 0% entry 45%}
+  }
+}
+
+/* ---------- responsive ---------- */
+@media (max-width:1000px){
+  .cards{grid-template-columns:repeat(2,1fr)}
+  .card:first-child{grid-row:auto}
+}
+@media (max-width:900px){
+  .about-grid{grid-template-columns:1fr}
+  .about .photo-ph{position:static;max-width:520px;margin-inline:auto}
+  .hero .photo-ph{max-width:none;aspect-ratio:4/3}
+  .fit{grid-template-columns:1fr}
+  .how{grid-template-columns:1fr;gap:40px}
+}
+@media (max-width:600px){
+  section{padding:80px 0}
+  .hero{min-height:auto;padding-top:48px}
+  .hero .photo-ph{aspect-ratio:4/5;border-radius:var(--r-lg)}
+  .hero-actions .btn{width:100%}
+  .cards{grid-template-columns:1fr}
+  .card:first-child{grid-column:auto}
+  .card{min-height:0;padding:32px 26px;border-radius:var(--r-lg)}
+  .card h3{margin-top:28px}
+  .contact-info,form{border-radius:var(--r-lg)}
+}
 </style>
 </head>
 <body>
@@ -281,7 +398,7 @@ body.a11y-nomotion *{transition:none !important;animation:none !important;scroll
     <div>
       <span class="eyebrow">טיפול ואימון בעין יהודית</span>
       <h1><span>ריפוי. צמיחה. תודעה. גילוי</span></h1>
-      <p class="sub">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;מקום בטוח.<br>&nbsp;להביא את עצמך לגדול מתוך המרחב הזה.&nbsp;</p>
+      <p class="sub">מקום בטוח.<br>להביא את עצמך לגדול מתוך המרחב הזה.</p>
       <div class="hero-actions">
         <a class="btn btn-wa" href="https://wa.me/972503390076?text=%D7%A9%D7%9C%D7%95%D7%9D%20%D7%90%D7%A4%D7%A8%D7%AA%2C%20%D7%90%D7%A9%D7%9E%D7%97%20%D7%9C%D7%A9%D7%99%D7%97%D7%AA%20%D7%94%D7%99%D7%9B%D7%A8%D7%95%D7%AA" target="_blank" rel="noopener">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.1l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.3-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6a2.7 2.7 0 0 0 1.8-1.2 2.2 2.2 0 0 0 .1-1.3c0-.1-.2-.2-.4-.3z"></path></svg>
