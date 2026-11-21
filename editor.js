@@ -1,6 +1,6 @@
 // עורך ויזואלי לאתר. נפתח כשמוסיפים ?edit לכתובת (efratgafnit.github.io/?edit).
 // לחיצה על טקסט (כולל כפתורים, תפריט, כותרת עליונה ותחתונה) עורכת אותו, לחיצה על תמונה מחליפה אותה (מוקטנת אוטומטית),
-// ופריטים ברשימות אפשר לשכפל, למחוק ולהזיז. "פרסום" שומר ישירות למאגר ב-GitHub
+// פריטים ברשימות אפשר לשכפל, למחוק ולהזיז, וכל חלק בעמוד אפשר להסתיר או להציג. "פרסום" שומר ישירות למאגר ב-GitHub
 // בעזרת מפתח גישה (Token) שנשמר רק בדפדפן של מי שעורך.
 (() => {
   const API = 'https://api.github.com/repos/efratgafnit/efratgafnit.github.io/contents/';
@@ -9,6 +9,7 @@
   // single-line texts: Enter finishes the edit instead of adding a line break
   const INLINE_SEL = 'a,label,span,small,summary,dt,cite,b,h1,h2,h3';
   const ZONE_SELS = ['header', 'main', 'footer'];
+  const HIDE_SEL = 'main > section, .ws-details'; // parts that can be hidden from the site
   const MAX_IMG_BYTES = 250 * 1024;
   const TOKEN_KEY = 'ed-gh-token';
   const main = document.querySelector('main');
@@ -38,6 +39,12 @@ body.ed-on .btn [contenteditable]:focus{background:rgba(255,255,255,.25)}
 .ed-item{position:absolute;z-index:999;display:none;gap:2px;background:#1f2a2a;padding:3px;border-radius:10px;direction:rtl;box-shadow:0 4px 14px rgba(0,0,0,.25)}
 .ed-item button{background:none;border:0;color:#fff;font:600 .85rem Assistant,sans-serif;padding:4px 8px;cursor:pointer;border-radius:7px}
 .ed-item button:hover{background:#2a8a8a}
+body.ed-on main > section,body.ed-on .ws-details{position:relative}
+.ed-toggle{position:absolute;top:10px;left:10px;z-index:20;background:#1f2a2a;color:#fff;border:0;border-radius:999px;padding:5px 12px;font:600 .8rem Assistant,sans-serif;cursor:pointer;opacity:.85;white-space:nowrap}
+.ed-toggle:hover{opacity:1;background:#2a8a8a}
+.ed-hidden{outline:3px dashed #c0392b;outline-offset:-3px}
+.ed-hidden > :not(.ed-toggle){opacity:.4}
+.ed-hidden > .ed-toggle{opacity:1;background:#c0392b}
 .ed-modal{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1001;display:grid;place-items:center;padding:16px}
 .ed-box{background:#fff;color:#222;border-radius:16px;padding:24px;max-width:460px;width:100%;direction:rtl;font-family:Assistant,sans-serif;line-height:1.6}
 .ed-box input{width:100%;margin:12px 0;padding:10px;border:1px solid #bbb;border-radius:10px;font:inherit;direction:ltr}
@@ -197,6 +204,31 @@ body.ed-on .btn [contenteditable]:focus{background:rgba(255,255,255,.25)}
     btn.setAttribute('aria-expanded', open);
   });
 
+  // ---------- show / hide parts ----------
+  // hidden parts stay visible (faded) while editing, each with a button to show or hide it on the site
+  const toggleLabel = sec => {
+    sec.querySelector(':scope > .ed-toggle').textContent =
+      sec.classList.contains('ed-hidden') ? '🙈 מוסתר באתר · לחצו להצגה' : '👁 הסתרה מהאתר';
+  };
+  function addToggles() {
+    document.querySelectorAll(HIDE_SEL).forEach(sec => {
+      if (sec.hasAttribute('hidden')) { sec.removeAttribute('hidden'); sec.classList.add('ed-hidden'); }
+      const b = document.createElement('button');
+      b.type = 'button'; b.className = 'ed-toggle';
+      sec.prepend(b);
+      toggleLabel(sec);
+    });
+  }
+  document.addEventListener('click', e => {
+    const b = e.target.closest('.ed-toggle');
+    if (!b) return;
+    const sec = b.parentElement;
+    sec.classList.toggle('ed-hidden');
+    toggleLabel(sec);
+    markDirty();
+    status(sec.classList.contains('ed-hidden') ? 'החלק יוסתר באתר אחרי "פרסום"' : 'החלק יוצג באתר אחרי "פרסום"');
+  });
+
   // ---------- images ----------
   function shrink(file, max) {
     return new Promise((resolve, reject) => {
@@ -273,6 +305,11 @@ body.ed-on .btn [contenteditable]:focus{background:rgba(255,255,255,.25)}
     c.querySelectorAll('.form-msg').forEach(m => { m.textContent = ''; m.removeAttribute('style'); });
     c.querySelectorAll('button[disabled]').forEach(b => b.removeAttribute('disabled'));
     c.querySelectorAll('.menu.open').forEach(m => m.classList.remove('open'));
+    c.querySelectorAll('.ed-toggle').forEach(t => t.remove());
+    c.querySelectorAll('.ed-hidden').forEach(n => {
+      n.classList.remove('ed-hidden'); if (!n.classList.length) n.removeAttribute('class');
+      n.setAttribute('hidden', '');
+    });
     c.querySelectorAll('.menu-btn').forEach(b => b.setAttribute('aria-expanded', 'false'));
     c.querySelectorAll('img[data-src]').forEach(i => { i.setAttribute('src', i.dataset.src); i.removeAttribute('data-src'); });
     return c;
@@ -336,6 +373,7 @@ body.ed-on .btn [contenteditable]:focus{background:rgba(255,255,255,.25)}
     }
     main.querySelectorAll('details').forEach(d => { d.open = true; });
     zones().forEach(makeEditable);
+    addToggles();
     document.querySelectorAll('[data-img]').forEach(s => s.classList.add('ed-img'));
     if (!statusEl.textContent.startsWith('לא')) status('לחצו על טקסט כדי לערוך, או על תמונה כדי להחליף');
   })();
